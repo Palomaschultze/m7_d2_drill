@@ -8,13 +8,10 @@ class Estudiantes {
         this.nro_identificacion = nro_identificacion;
     }
 
-    static findAll() {
+    static findAll(query) {
         return new Promise(async (resolve, reject) => {
             try {
-                let query = {
-                    text: "SELECT id, nombres, apellidos, edad, nro_identificacion FROM estudiantes",
-                    values: [],
-                };
+ ;
                 let resultado = await consulta(query);
                 return resolve(resultado);
             } catch (error) {
@@ -40,12 +37,12 @@ class Estudiantes {
         })
     };
 
-	static updateUser(nombres, apellidos, edad, nro_identificacion) {
+	static updateUser(id, nombres, apellidos, edad, nro_identificacion) {
 		return new Promise(async (resolve, reject) => {
 			try {
 				let query = {
-					text: 'UPDATE estudiantes SET nombres=$2, apellidos=$3 edad=$4 nro_identificacion=$5 WHERE id = $1',
-					values: [nombres, apellidos, edad, nro_identificacion],
+					text: 'UPDATE estudiantes SET nombres=$2, apellidos=$3, edad=$4, nro_identificacion=$5 WHERE id = $1',
+					values: [id, nombres, apellidos, edad, nro_identificacion],
 				};
 				let resultado = await consulta(query);
 				return resolve(resultado);

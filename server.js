@@ -16,10 +16,39 @@ app.get('/', (req, res) => {
 });
 
 app.get('/estudiantes', (req, res) => {
-    Estudiantes.findAll()
+    let query = {
+        text: "SELECT id, nombres, apellidos, edad, nro_identificacion FROM estudiantes",
+        values: [],
+    };
+    Estudiantes.findAll(query)
         .then((data) => res.send({ code: 200, data: data, message: 'Cumplido' })
         ).catch((error) => res.status(500).send({ code: 500, error }))
 })
+
+//Buscar por edad
+app.get('/estudiantes/:edad', (req, res) => {
+    let {edad} = req.params;
+    let query = {
+        text: "SELECT id, nombres, apellidos, edad, nro_identificacion FROM estudiantes WHERE CAST(edad AS INTEGER) > $1;",
+        values: [edad],
+    };
+    Estudiantes.findAll(query)
+        .then((data) => res.send({ code: 200, data: data, message: 'Cumplido' })
+        ).catch((error) => res.status(500).send({ code: 500, error }))
+});
+
+//Buscar por apellido en forma decendente
+app.get('/estudiantes/columna/:col', (req, res) => {
+    let {col} = req.params;
+    let query = {
+        text: `SELECT id, nombres, apellidos, nro_identificacion FROM estudiantes ORDER BY ${col} DESC;`,
+        values: [],
+    };
+    Estudiantes.findAll(query)
+        .then((data) => res.send({ code: 200, data: data, message: 'Cumplido' })
+        ).catch((error) => res.status(500).send({ code: 500, error }))
+});
+
 
 app.post('/estudiantes', (req, res) => {
     let { nombres, apellidos, edad, nro_identificacion } = req.body;
@@ -74,12 +103,6 @@ app.delete('/estudiantes/:id', (req, res) => {
 
 
 //Rutas cursos
-app.get('/cursos', (req, res) => {
-    Cursos.findAll()
-        .then((data) => res.send({ code: 200, data: data, message: 'Cumplido' })
-        ).catch((error) => res.status(500).send({ code: 500, error }))
-})
-
 app.get('/cursos', (req, res) => {
     Cursos.findAll()
         .then((data) => res.send({ code: 200, data: data, message: 'Cumplido' })

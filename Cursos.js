@@ -27,7 +27,7 @@ class Cursos {
         return new Promise(async (resolve, reject) => {
             try {
                 let query = {
-                    text: `INSERT INTO cursos(titulo, descripcion) VALUES($1,$2) returning id, titulo, descripcion`,
+                    text: `INSERT INTO cursos(titulo, descripcion) VALUES($1, $2) returning id, titulo, descripcion`,
                     values: [this.titulo, this.descripcion],
                 };
                 let resultado = await consulta(query);
@@ -39,12 +39,12 @@ class Cursos {
         })
     };
 
-    static updateUser(titulo, descripcion) {
+    static updateUser(id, titulo, descripcion) {
 		return new Promise(async (resolve, reject) => {
 			try {
 				let query = {
 					text: 'UPDATE cursos SET titulo=$2, descripcion=$3 WHERE id = $1',
-					values: [titulo, descripcion],
+					values: [id, titulo, descripcion],
 				};
 				let resultado = await consulta(query);
 				return resolve(resultado);
